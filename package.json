@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18"
