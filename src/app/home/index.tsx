@@ -5,7 +5,7 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <div className="flex h-screen items-center max-w-[calc(100vw-(100vw-1160px)/2)] gap-20 ml-auto">
-      <div className="max-w-[480px] px-10">
+      <div className="max-w-[480px] px-10 py-2">
         <h1 className="text-4xl font-extrabold leading-snug">
           Agendamento Descomplicado
         </h1>
@@ -15,7 +15,7 @@ export default function Home() {
         </p>
         <ClaimUserNameForm />
       </div>
-      <div className="pr-8 sm:hidden w-[700px] h-[400px]">
+      <div className="pr-8 sm:hidden w-[700px] h-[350px]">
         <Image
           className="h-full w-full"
           src={previewImage}
