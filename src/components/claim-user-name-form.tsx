@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
+import { ArrowRight } from '@phosphor-icons/react'
 import { Button } from '@/components/button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'

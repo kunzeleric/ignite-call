@@ -8,7 +8,7 @@ interface ButtonProps extends ComponentProps<'button'> {
 export function Button({ children, className, ...props }: ButtonProps) {
   return (
     <button
-      className={`flex text-sm items-center gap-2 px-4 py-2 rounded-md ${className} text-white duration-300 bg-green-500 hover:bg-green-600`}
+      className={`flex text-sm justify-center items-center gap-2 px-4 py-2 rounded-md ${className} text-white duration-300 bg-green-500 hover:bg-green-600`}
       {...props}
     >
       {children}
