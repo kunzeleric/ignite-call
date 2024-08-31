@@ -3,10 +3,13 @@
 import { Button } from '@/components/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
+
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { api } from '../lib/axios'
+import { AxiosError } from 'axios'
 
 const registerFormSchema = z.object({
   username: z
@@ -24,7 +27,8 @@ const registerFormSchema = z.object({
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
-  const { query } = useRouter()
+  const searchParams = useSearchParams()
+  const { push } = useRouter()
   const {
     register,
     handleSubmit,
@@ -35,12 +39,27 @@ export default function Register() {
   })
 
   async function onSubmit(data: RegisterFormData) {
-    console.log(data)
+    try {
+      await api.post('/users', {
+        name: data.name,
+        username: data.username,
+      })
+
+      push('/register/connect-calendar')
+    } catch (err) {
+      if (err instanceof AxiosError && err?.response?.data?.message) {
+        alert(err.response.data.message)
+        return
+      }
+
+      console.error(err)
+    }
   }
 
   useEffect(() => {
-    if (query.username) setValue('username', String(query.username))
-  }, [query?.username, setValue])
+    if (searchParams.has('username'))
+      setValue('username', String(searchParams.get('username')))
+  }, [searchParams, setValue])
 
   return (
     <main className="max-w-[572px] mt-28 mx-auto mb-4 px-4">
