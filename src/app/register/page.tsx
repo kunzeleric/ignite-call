@@ -3,6 +3,8 @@
 import { Button } from '@/components/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -22,10 +24,12 @@ const registerFormSchema = z.object({
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
+  const { query } = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
@@ -33,6 +37,10 @@ export default function Register() {
   async function onSubmit(data: RegisterFormData) {
     console.log(data)
   }
+
+  useEffect(() => {
+    if (query.username) setValue('username', String(query.username))
+  }, [query?.username, setValue])
 
   return (
     <main className="max-w-[572px] mt-28 mx-auto mb-4 px-4">
