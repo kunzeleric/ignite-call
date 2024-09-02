@@ -101,7 +101,7 @@ export default function Register() {
               <p className="text-sm text-red-400">{errors.name.message}</p>
             )}
           </div>
-          <Button disabled={isSubmitting} type="submit">
+          <Button variation="primary" disabled={isSubmitting} type="submit">
             Próximo passo
             <ArrowRight />
           </Button>
