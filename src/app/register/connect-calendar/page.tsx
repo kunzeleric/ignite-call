@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/button'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
+import { signIn } from 'next-auth/react'
 
 export default function Register() {
   async function onSubmit() {}
@@ -21,7 +22,7 @@ export default function Register() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between p-4 rounded-md border border-gray-600">
             <p className="text-gray-200">Google Calendar</p>
-            <Button variation="primary">
+            <Button onClick={() => signIn('google')} variation="primary">
               Conectar <ArrowRight />
             </Button>
           </div>
