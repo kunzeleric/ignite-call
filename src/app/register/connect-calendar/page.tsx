@@ -1,11 +1,22 @@
 'use client'
 
 import { Button } from '@/components/button'
+import { Check } from '@phosphor-icons/react'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
+import { useSearchParams } from 'next/navigation'
 
 export default function Register() {
-  async function onSubmit() {}
+  const session = useSession()
+  const searchParams = useSearchParams()
+
+  const hasAuthError = searchParams.has('error')
+
+  const isSignedIn = session?.status === 'authenticated'
+
+  async function handleConnectCalendar() {
+    await signIn('google')
+  }
 
   return (
     <main className="max-w-[572px] mt-28 mx-auto mb-4 px-4">
@@ -22,11 +33,32 @@ export default function Register() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between p-4 rounded-md border border-gray-600">
             <p className="text-gray-200">Google Calendar</p>
-            <Button onClick={() => signIn('google')} variation="primary">
-              Conectar <ArrowRight />
-            </Button>
+            {isSignedIn ? (
+              <Button
+                disabled
+                variation="secondary"
+                className="disabled:cursor-not-allowed"
+              >
+                Conectado <Check />
+              </Button>
+            ) : (
+              <Button onClick={handleConnectCalendar} variation="primary">
+                Conectar <ArrowRight />
+              </Button>
+            )}
           </div>
-          <Button variation="secondary" type="submit">
+          {hasAuthError && (
+            <p className="text-red-400 mb-2 text-sm">
+              Falha ao se conectar ao Google, verifique se você habilitou as
+              permissões de acesso ao Google Calendar.
+            </p>
+          )}
+          <Button
+            variation={isSignedIn ? 'primary' : 'secondary'}
+            type="submit"
+            className="disabled:cursor-not-allowed"
+            disabled={!isSignedIn}
+          >
             Próximo passo
             <ArrowRight />
           </Button>
