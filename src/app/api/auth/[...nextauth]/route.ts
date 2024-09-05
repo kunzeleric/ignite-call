@@ -1,6 +1,6 @@
 import { PrismaAdapter } from '@/app/lib/auth/prisma-adapter'
 import NextAuth, { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import { NextRequest } from 'next/server'
 
 async function auth(req: NextRequest) {
@@ -16,11 +16,26 @@ async function auth(req: NextRequest) {
               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
           },
         },
+        profile(profile: GoogleProfile) {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            email: profile.email,
+            username: '',
+            avatar_url: profile.picture,
+          }
+        },
       }),
     ],
     callbacks: {
       async signIn() {
         return true
+      },
+      async session({ session, user }) {
+        return {
+          ...session,
+          user,
+        }
       },
     },
   } as NextAuthOptions
