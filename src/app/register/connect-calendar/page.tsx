@@ -6,7 +6,7 @@ import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { signIn, useSession } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 
-export default function Register() {
+export default function ConnectCalendar() {
   const session = useSession()
   const searchParams = useSearchParams()
 
