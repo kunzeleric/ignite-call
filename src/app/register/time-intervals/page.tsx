@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/button'
+import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
 import { getWeekDays } from '@/utils/get-week-days'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
@@ -21,10 +22,32 @@ const timeIntervalFormSchema = z.object({
     .transform((intervals) => intervals.filter((interval) => interval.enabled))
     .refine((intervals) => intervals.length > 0, {
       message: 'Selecione pelo menos um dia da semana.',
-    }),
+    })
+    .transform((intervals) => {
+      return intervals.map((interval) => {
+        return {
+          weekDay: interval.weekDay,
+          startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+        }
+      })
+    })
+    .refine(
+      (intervals) => {
+        return intervals.every(
+          (interval) =>
+            interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes,
+        )
+      },
+      {
+        message:
+          'O horário de término deve ser pelo menos 1h distance do início.',
+      },
+    ),
 })
 
-type TimeIntervalFormData = z.infer<typeof timeIntervalFormSchema>
+type TimeIntervalFormDataInput = z.input<typeof timeIntervalFormSchema>
+type TimeIntervalsFormDataOutput = z.output<typeof timeIntervalFormSchema>
 
 export default function TimeIntervals() {
   const {
@@ -33,7 +56,7 @@ export default function TimeIntervals() {
     control,
     formState: { isSubmitting, errors },
     watch,
-  } = useForm<TimeIntervalFormData>({
+  } = useForm<TimeIntervalFormDataInput, unknown, TimeIntervalsFormDataOutput>({
     resolver: zodResolver(timeIntervalFormSchema),
     defaultValues: {
       intervals: [
@@ -57,7 +80,7 @@ export default function TimeIntervals() {
 
   const intervals = watch('intervals')
 
-  async function handleSetTimeIntervals(data: any) {
+  async function handleSetTimeIntervals(data: TimeIntervalsFormDataOutput) {
     console.log(data)
   }
   console.log(errors)
