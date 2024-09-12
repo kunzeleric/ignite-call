@@ -4,11 +4,12 @@ import { Button } from '@/components/button'
 import { Check } from '@phosphor-icons/react'
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr'
 import { signIn, useSession } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function ConnectCalendar() {
   const session = useSession()
   const searchParams = useSearchParams()
+  const { push } = useRouter()
 
   const hasAuthError = searchParams.has('error')
 
@@ -57,6 +58,7 @@ export default function ConnectCalendar() {
             variation={isSignedIn ? 'primary' : 'secondary'}
             type="submit"
             className="disabled:cursor-not-allowed"
+            onClick={() => push('/register/time-intervals')}
             disabled={!isSignedIn}
           >
             Próximo passo

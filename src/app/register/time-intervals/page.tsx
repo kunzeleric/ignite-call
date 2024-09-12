@@ -1,5 +1,6 @@
 'use client'
 
+import { api } from '@/app/lib/axios'
 import { Button } from '@/components/button'
 import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
 import { getWeekDays } from '@/utils/get-week-days'
@@ -81,7 +82,7 @@ export default function TimeIntervals() {
   const intervals = watch('intervals')
 
   async function handleSetTimeIntervals(data: TimeIntervalsFormDataOutput) {
-    console.log(data)
+    await api.post('/users/time-intervals', data)
   }
   console.log(errors)
   return (
