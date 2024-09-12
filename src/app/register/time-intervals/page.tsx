@@ -6,6 +6,7 @@ import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minut
 import { getWeekDays } from '@/utils/get-week-days'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from '@phosphor-icons/react'
+import { useRouter } from 'next/navigation'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -71,6 +72,8 @@ export default function TimeIntervals() {
       ],
     },
   })
+
+  const { push } = useRouter()
 
   const weekDays = getWeekDays()
 
@@ -151,7 +154,12 @@ export default function TimeIntervals() {
             {errors.intervals.root?.message}
           </p>
         )}
-        <Button disabled={isSubmitting} form="weekDaysForm" type="submit">
+        <Button
+          disabled={isSubmitting}
+          onClick={() => push('/register/update-profile')}
+          form="weekDaysForm"
+          type="submit"
+        >
           Próximo passo <ArrowRight />
         </Button>
       </div>

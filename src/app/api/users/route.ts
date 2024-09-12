@@ -29,3 +29,17 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ user }, { status: 201 })
 }
+
+export async function PUT(req: NextRequest) {
+  const body = await req.json()
+  const { bio, id } = body
+
+  await prisma.user.update({
+    where: { id },
+    data: {
+      bio,
+    },
+  })
+
+  return NextResponse.json({}, { status: 200 })
+}
