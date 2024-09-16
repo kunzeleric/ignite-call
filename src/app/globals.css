@@ -7,3 +7,19 @@
   outline: 0;
   box-shadow: 0 0 0 1px transparent;
 }
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-radius: 0.25rem;
+}
+
+table tbody td {
+  box-sizing: border-box;
+}
+
+tbody::before {
+  line-height: 0.75rem;
+  content: "";
+  display: block;
+}

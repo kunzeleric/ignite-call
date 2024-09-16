@@ -5,8 +5,8 @@ export function Calendar() {
   const shortWeekDays = getWeekDays({ short: true })
 
   return (
-    <div className="w-full bg-gray-600 rounded-md min-w-[540px] px-4">
-      <div className="flex justify-between py-2">
+    <div className="bg-gray-800 rounded-md w-[540px] p-6">
+      <div className="flex justify-between pb-6">
         <h2>Setembro, 2024</h2>
         <div className="flex gap-4 items-center">
           <CaretLeft weight="bold" size={20} />
@@ -15,15 +15,40 @@ export function Calendar() {
       </div>
       <table>
         <thead>
-          <tr className="flex gap-4">
+          <tr className="flex justify-around mt-2">
             {shortWeekDays.map((day, index) => {
-              return <th key={index}>{day}.</th>
+              return (
+                <th className="w-16" key={index}>
+                  {day}.
+                </th>
+              )
             })}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
+          <tr className="flex justify-around mt-2">
+            <td className="w-16 aspect-square"></td>
+            <td className="w-16 aspect-square"></td>
+            <td className="w-16 aspect-square"></td>
+            <td className="w-16 aspect-square"></td>
+            <td>
+              <button
+                disabled
+                className="w-16 aspect-square disabled:bg-transparent disabled:cursor-default disabled:opacity-40 bg-gray-600 [&:not(:disabled):hover]:bg-gray-500 text-center rounded-md cursor-pointer"
+              >
+                1
+              </button>
+            </td>
+            <td>
+              <button className="w-16 aspect-square disabled:bg-transparent disabled:cursor-default disabled:opacity-40 bg-gray-600 [&:not(:disabled):hover]:bg-gray-500 text-center rounded-md cursor-pointer">
+                2
+              </button>
+            </td>
+            <td>
+              <button className="w-16 aspect-square disabled:bg-transparent disabled:cursor-default disabled:opacity-40 bg-gray-600 [&:not(:disabled):hover]:bg-gray-500 text-center rounded-md cursor-pointer">
+                3
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
