@@ -1,5 +1,9 @@
 import { CalendarStep } from './CalendarStep'
 
 export function ScheduleForm() {
-  return <CalendarStep />
+  return (
+    <div className="max-w-[852px]">
+      <CalendarStep />
+    </div>
+  )
 }

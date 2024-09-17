@@ -11,7 +11,7 @@ export default function Schedule() {
 
   return (
     <main className="flex items-center justify-center mt-28">
-      <div className="max-w-[600px] py-4">
+      <div className="py-4">
         <div className="flex flex-col items-center">
           <img
             src={session.data?.user.avatar_url}

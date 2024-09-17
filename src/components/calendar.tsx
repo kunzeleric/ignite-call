@@ -5,7 +5,7 @@ export function Calendar() {
   const shortWeekDays = getWeekDays({ short: true })
 
   return (
-    <div className="bg-gray-800 rounded-md w-[540px] p-6">
+    <div className="">
       <div className="flex justify-between pb-6">
         <h2>Setembro, 2024</h2>
         <div className="flex gap-4 items-center">
