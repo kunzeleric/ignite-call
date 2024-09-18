@@ -1,9 +1,11 @@
 import { CalendarStep } from './CalendarStep'
+import { ConfirmStep } from './ConfirmStep'
 
 export function ScheduleForm() {
   return (
-    <div className="max-w-[852px]">
-      <CalendarStep />
+    <div className="w-full max-w-[852px]">
+      {/* <CalendarStep /> */}
+      <ConfirmStep />
     </div>
   )
 }

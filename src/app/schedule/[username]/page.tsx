@@ -10,7 +10,7 @@ export default function Schedule() {
   if (!session || session.status === 'loading') return
 
   return (
-    <main className="flex items-center justify-center mt-28">
+    <main className="flex justify-center mt-28">
       <div className="py-4">
         <div className="flex flex-col items-center">
           <img
