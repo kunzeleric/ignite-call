@@ -2,13 +2,33 @@
 'use client'
 
 import { Button } from '@/components/button'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+const confirmationFormSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: 'Nome precisa de no mínimo 3 caracteres.' }),
+  email: z.string().email({ message: 'Digite um email válido.' }),
+  observations: z.string().nullable(),
+})
+
+type ConfirmFormData = z.infer<typeof confirmationFormSchema>
 
 export function ConfirmStep() {
-  const { handleSubmit, register } = useForm()
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting, errors },
+  } = useForm<ConfirmFormData>({
+    resolver: zodResolver(confirmationFormSchema),
+  })
 
-  function handleConfirmScheduling() {}
+  function handleConfirmScheduling(data: ConfirmFormData) {
+    console.log(data)
+  }
 
   return (
     <main className="min-w-[540px] bg-gray-800 rounded-lg mx-auto mt-6 mb-4 p-6">
@@ -35,8 +55,11 @@ export function ConfirmStep() {
               placeholder="ignite.com/seu-usuario"
               type="text"
               className="bg-gray-900 px-3 rounded-md py-2"
-              {...register('username')}
+              {...register('name')}
             />
+            {errors.name && (
+              <p className="text-sm text-red-400">{errors.name.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-white">Endereço de e-mail</label>
@@ -44,14 +67,17 @@ export function ConfirmStep() {
               type="text"
               placeholder="Seu nome"
               className="bg-gray-900 px-3 rounded-md py-2"
-              {...register('name')}
+              {...register('email')}
             />
+            {errors.email && (
+              <p className="text-sm text-red-400">{errors.email.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-white">Observações</p>
             <textarea
               className="bg-gray-900 px-3 rounded-md py-2 w-full h-24 resize-none"
-              {...register('bio')}
+              {...register('observations')}
             />
           </div>
           <div className="flex justify-end">
