@@ -1,7 +1,7 @@
 import { Calendar } from '@/components/calendar'
 
 export function CalendarStep() {
-  const isDateSelected = true
+  const isDateSelected = false
 
   return (
     <div

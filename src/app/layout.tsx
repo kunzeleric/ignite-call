@@ -3,6 +3,7 @@
 import { Roboto_Flex } from 'next/font/google'
 import './globals.css'
 import { SessionProvider } from 'next-auth/react'
+import '@/app/lib/dayjs'
 
 const roboto = Roboto_Flex({
   subsets: ['latin'],

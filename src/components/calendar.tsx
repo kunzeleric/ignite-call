@@ -1,16 +1,49 @@
 import { getWeekDays } from '@/utils/get-week-days'
 import { CaretLeft, CaretRight } from '@phosphor-icons/react'
+import { useState } from 'react'
+import dayjs from 'dayjs'
 
 export function Calendar() {
+  const [currentDate, setCurrentDate] = useState(() => {
+    return dayjs().set('date', 1)
+  })
+
+  function handlePreviousMonth() {
+    const previousMonthDate = currentDate.subtract(1, 'month')
+
+    setCurrentDate(previousMonthDate)
+  }
+
+  function handleNextMonth() {
+    const nextMonthDate = currentDate.add(1, 'month')
+
+    setCurrentDate(nextMonthDate)
+  }
+
   const shortWeekDays = getWeekDays({ short: true })
+
+  const currentMonth = currentDate.format('MMMM')
+  const currentYear = currentDate.format('YYYY')
 
   return (
     <div className="">
       <div className="flex justify-between pb-6">
-        <h2>Setembro, 2024</h2>
+        <h2 className="capitalize">
+          {currentMonth}, {currentYear}
+        </h2>
         <div className="flex gap-4 items-center">
-          <CaretLeft weight="bold" size={20} />
-          <CaretRight weight="bold" size={20} />
+          <CaretLeft
+            className="cursor-pointer"
+            onClick={handlePreviousMonth}
+            weight="bold"
+            size={20}
+          />
+          <CaretRight
+            className="cursor-pointer"
+            onClick={handleNextMonth}
+            weight="bold"
+            size={20}
+          />
         </div>
       </div>
       <table>
