@@ -1,10 +1,16 @@
 import { Calendar } from '@/components/calendar'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 
 export function CalendarStep() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const isDateSelected = !!selectedDate
+
+  const weekDay = selectedDate ? dayjs(selectedDate).format('dddd') : null
+  const describedDate = selectedDate
+    ? dayjs(selectedDate).format('DD[ de ]MMMM')
+    : null
 
   return (
     <div
@@ -14,7 +20,7 @@ export function CalendarStep() {
       {isDateSelected && (
         <div className="pt-6 px-6 pb-0 absolute w-[280px] right-0 top-0 bottom-0 overflow-y-scroll border-l-2 border-gray-600">
           <h2 className="font-bold text-center mb-3">
-            terça-feira, <span className="font-normal">20 de setembro</span>
+            {weekDay}, <span className="font-normal">{describedDate}</span>
           </h2>
           <div className="grid grid-cols-1 gap-2 font-medium max-[900px]:grid-cols-2">
             <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
