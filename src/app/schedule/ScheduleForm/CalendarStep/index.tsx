@@ -4,9 +4,14 @@ import dayjs from 'dayjs'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+interface Availability {
+  possibleTimes: number[]
+  availableTimes: number[]
+}
+
 export function CalendarStep() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [availability, setAvailability] = useState(null)
+  const [availability, setAvailability] = useState<Availability | null>(null)
 
   const pathParams = usePathname()
   const isDateSelected = !!selectedDate
@@ -24,7 +29,7 @@ export function CalendarStep() {
         `/users/availability?user=${pathParams.split('/')[2]}&date=${dayjs(selectedDate).format('YYYY-MM-DD')}`,
       )
       .then((response) => {
-        console.log(response.data)
+        setAvailability(response.data)
       })
   }, [selectedDate, pathParams])
 
@@ -39,36 +44,17 @@ export function CalendarStep() {
             {weekDay}, <span className="font-normal">{describedDate}</span>
           </h2>
           <div className="grid grid-cols-1 gap-2 font-medium max-[900px]:grid-cols-2">
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              9:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              10:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              11:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              12:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              13:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              14:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              15:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              16:00h
-            </button>
-            <button className="bg-gray-600 w-full py-2 rounded-md hover:bg-gray-400">
-              17:00h
-            </button>
-            <button className="bg-gray-600 mb-6 w-full py-2 rounded-md hover:bg-gray-400">
-              18:00h
-            </button>
+            {availability?.possibleTimes.map((hour) => {
+              return (
+                <button
+                  key={hour}
+                  disabled={!availability?.availableTimes.includes(hour)}
+                  className="bg-gray-600 disabled:bg-transparent w-full py-2 rounded-md hover:bg-gray-400"
+                >
+                  {String(hour).padStart(2, '0')}:00h
+                </button>
+              )
+            })}
           </div>
         </div>
       )}
