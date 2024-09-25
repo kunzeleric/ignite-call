@@ -4,6 +4,8 @@ import { Roboto_Flex } from 'next/font/google'
 import './globals.css'
 import { SessionProvider } from 'next-auth/react'
 import '@/app/lib/dayjs'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from './lib/react-query'
 
 const roboto = Roboto_Flex({
   subsets: ['latin'],
@@ -18,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} bg-gray-900 text-gray-100`}>
-        <SessionProvider>{children}</SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )

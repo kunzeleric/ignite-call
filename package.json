@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@phosphor-icons/react": "^2.1.7",
     "@prisma/client": "^5.19.0",
+    "@tanstack/react-query": "^5.56.2",
     "axios": "^1.7.6",
     "dayjs": "^1.11.13",
     "next": "14.2.6",

@@ -1,8 +1,9 @@
 import { api } from '@/app/lib/axios'
 import { Calendar } from '@/components/calendar'
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface Availability {
   possibleTimes: number[]
@@ -11,7 +12,6 @@ interface Availability {
 
 export function CalendarStep() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [availability, setAvailability] = useState<Availability | null>(null)
 
   const pathParams = usePathname()
   const isDateSelected = !!selectedDate
@@ -21,17 +21,23 @@ export function CalendarStep() {
     ? dayjs(selectedDate).format('DD[ de ]MMMM')
     : null
 
-  useEffect(() => {
-    if (!selectedDate) return
+  const selectedDateWithoutTime = selectedDate
+    ? dayjs(selectedDate).format('YYYY-MM-DD')
+    : null
 
-    api
-      .get(
-        `/users/availability?user=${pathParams.split('/')[2]}&date=${dayjs(selectedDate).format('YYYY-MM-DD')}`,
-      )
-      .then((response) => {
-        setAvailability(response.data)
+  const { data: availability } = useQuery<Availability>({
+    queryKey: ['availability', selectedDateWithoutTime],
+    queryFn: async () => {
+      const response = await api.get(`/users/availability}`, {
+        params: {
+          date: selectedDateWithoutTime,
+          user: pathParams.split('/')[2],
+        },
       })
-  }, [selectedDate, pathParams])
+      return response.data
+    },
+    enabled: !!selectedDate,
+  })
 
   return (
     <div
