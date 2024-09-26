@@ -10,7 +10,7 @@ interface CalendarWeek {
   week: number
   days: Array<{
     date: dayjs.Dayjs
-    disabled?: boolean
+    disabled: boolean
   }>
 }
 
@@ -52,19 +52,20 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
   const { data: blockedDates } = useQuery<BlockedDates>({
     queryKey: ['blocked-dates'],
     queryFn: async () => {
-      const response = await api.get(`/users/blocked-dates}`, {
+      const response = await api.get(`/users/blocked-dates`, {
         params: {
           year: currentDate.get('year'),
-          month: currentDate.get('month'),
+          month: currentDate.get('month') + 1,
           user: pathParams.split('/')[2],
         },
       })
       return response.data
     },
-    enabled: !!selectedDate,
   })
 
   const calendarWeeks = useMemo(() => {
+    if (!blockedDates) return []
+
     // creates an array of arrays representing each day in the current month
     const daysInMonthArray = Array.from({
       length: currentDate.daysInMonth(),
@@ -108,7 +109,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
           date,
           disabled:
             date.endOf('day').isBefore(new Date()) ||
-            blockedDates?.blockedWeekDays.includes(date.get('day')),
+            blockedDates.blockedWeekDays.includes(date.get('day')),
         }
       }),
       ...nextMonthFillArray.map((date) => {

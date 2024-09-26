@@ -75,7 +75,7 @@ export default function TimeIntervals() {
 
   const { push } = useRouter()
 
-  const weekDays = getWeekDays()
+  const weekDays = getWeekDays({ short: false })
 
   const { fields } = useFieldArray({
     name: 'intervals',
