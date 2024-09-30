@@ -4,6 +4,7 @@
 import { Button } from '@/components/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react'
+import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -17,11 +18,19 @@ const confirmationFormSchema = z.object({
 
 type ConfirmFormData = z.infer<typeof confirmationFormSchema>
 
-export function ConfirmStep() {
+interface ConfirmStepProps {
+  schedulingDate: Date
+  onCancelConfirmation: () => void
+}
+
+export function ConfirmStep({
+  schedulingDate,
+  onCancelConfirmation,
+}: ConfirmStepProps) {
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmationFormSchema),
   })
@@ -30,18 +39,19 @@ export function ConfirmStep() {
     console.log(data)
   }
 
+  const describedDate = dayjs(schedulingDate).format('DD[ de ]MMMM[ de ]YYYY')
+  const describedTime = dayjs(schedulingDate).format('HH:mm[h]')
+
   return (
     <main className="min-w-[540px] bg-gray-800 rounded-lg mx-auto mt-6 mb-4 p-6">
       <div className="flex gap-4 items-center border-b-2 border-gray-600 pb-6">
         <div className="flex items-center gap-2">
           <CalendarBlank size={20} />
-          <p className="text-white font-medium leading-none">
-            22 de Setembro de 2022
-          </p>
+          <p className="text-white font-medium leading-none">{describedDate}</p>
         </div>
         <div className="flex items-center gap-2">
           <Clock size={20} />
-          <p className="text-white font-medium">18:00h</p>
+          <p className="text-white font-medium">{describedTime}</p>
         </div>
       </div>
       <div>
@@ -81,7 +91,11 @@ export function ConfirmStep() {
             />
           </div>
           <div className="flex justify-end">
-            <Button variation="secondary" className="bg-transparent">
+            <Button
+              variation="secondary"
+              className="bg-transparent"
+              onClick={() => onCancelConfirmation()}
+            >
               Cancelar
             </Button>
             <Button variation="primary">Confirmar</Button>

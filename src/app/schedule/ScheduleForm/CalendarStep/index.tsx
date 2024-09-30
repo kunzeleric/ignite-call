@@ -10,7 +10,11 @@ interface Availability {
   availableTimes: number[]
 }
 
-export function CalendarStep() {
+interface CalendarStepProps {
+  onSelectDateTime: (date: Date) => void
+}
+
+export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const pathParams = usePathname()
@@ -39,6 +43,15 @@ export function CalendarStep() {
     enabled: !!selectedDate,
   })
 
+  function handleSelectTime(hour: number) {
+    const dateWithTime = dayjs(selectedDate)
+      .set('hour', hour)
+      .startOf('hour')
+      .toDate()
+
+    onSelectDateTime(dateWithTime)
+  }
+
   return (
     <div
       className={`mx-6 bg-gray-800 rounded-md mt-4 p-6 grid relative ${isDateSelected ? 'grid-cols-[1fr,_280px]' : 'grid-cols-1 w-[540px]'}`}
@@ -55,6 +68,7 @@ export function CalendarStep() {
                 <button
                   key={hour}
                   disabled={!availability?.availableTimes.includes(hour)}
+                  onClick={() => handleSelectTime(hour)}
                   className="bg-gray-600 disabled:bg-transparent w-full py-2 rounded-md hover:bg-gray-400"
                 >
                   {String(hour).padStart(2, '0')}:00h
