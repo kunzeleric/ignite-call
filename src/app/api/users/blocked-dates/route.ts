@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
+
   const username = searchParams.get('user') || ''
   const year = searchParams.get('year') || ''
   const month = searchParams.get('month') || ''
@@ -35,16 +36,28 @@ export async function GET(req: NextRequest) {
     )
   })
 
-  const blockedDatesRaw = await prisma.$queryRaw`
-    SELECT * 
+  const blockedDatesRaw: Array<{ date: number }> = await prisma.$queryRaw`
+    SELECT 
+      EXTRACT(DAY FROM S.date) AS date,
+      COUNT(S.date) AS amount,
+      ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60) AS size
+
     FROM schedulings S
 
+    LEFT JOIN user_time_intervals UTI
+      on UTI.week_day = WEEKDAY(DATE_ADD(S.date, INTERVAL 1 DAY))
+
     WHERE S.user_id = ${user.id}
-      AND DATE_FORMAT(S.date, "%Y-%m") = ${`${year}-${month}`}
+      AND EXTRACT(YEAR FROM S.date) = ${Number(year)}
+      AND EXTRACT(MONTH FROM S.date) = ${Number(month)}
+
+    GROUP BY EXTRACT(DAY FROM S.date),
+      ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60)
+
+    HAVING amount >= size
   `
 
-  return NextResponse.json(
-    { blockedWeekDays, blockedDatesRaw },
-    { status: 200 },
-  )
+  const blockedDates = blockedDatesRaw.map((item) => item.date)
+
+  return NextResponse.json({ blockedWeekDays, blockedDates }, { status: 200 })
 }
