@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
   })
 
   const availableTimes = possibleTimes.filter((time) => {
-    const isTimeBlocked = !blockedTimes.some(
+    const isTimeBlocked = blockedTimes.some(
       (blockedTime) => blockedTime.date.getHours() === time,
     )
 

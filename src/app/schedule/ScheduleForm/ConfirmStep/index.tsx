@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
+import { api } from '@/app/lib/axios'
 import { Button } from '@/components/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarBlank, Clock } from '@phosphor-icons/react'
 import dayjs from 'dayjs'
+import { usePathname } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -35,8 +37,19 @@ export function ConfirmStep({
     resolver: zodResolver(confirmationFormSchema),
   })
 
-  function handleConfirmScheduling(data: ConfirmFormData) {
-    console.log(data)
+  const pathParams = usePathname()
+  const username = pathParams.split('/')[2]
+
+  async function handleConfirmScheduling(data: ConfirmFormData) {
+    const { email, name, observations } = data
+    await api.post(`/users/schedule?user=${username}`, {
+      name,
+      email,
+      observations,
+      date: schedulingDate,
+    })
+
+    onCancelConfirmation()
   }
 
   const describedDate = dayjs(schedulingDate).format('DD[ de ]MMMM[ de ]YYYY')
